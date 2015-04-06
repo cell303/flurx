@@ -1,64 +1,52 @@
-var Rx = require('rx');
+import Rx from 'rx';
 
-// mixin version:
-// we can call the action itself like actionName()
-var Action = function (fn) {
-	var begin = new Rx.Subject();
-	var end = new Rx.Subject();
-
-	var action = function (data) {
-		if (fn) {
-			action.onNext(fn.apply(null, arguments));
-		} else {
-			action.onNext(data);
-		}
-	};
-
-	for (var key in Rx.Subject.prototype) {
-		action[key] = Rx.Subject.prototype[key];
-	}
-
-	Rx.Subject.call(action);
-
-	action._onNext = action.onNext;
-
-	action.onNext = function(data) {
-		begin.onNext(data);
-		action._onNext(data);
-		end.onNext();
-	};
-
-	action.waitFor = function (observers) {
-		observers = Array.prototype.slice.call(arguments);
-
-		return begin.flatMap(function (value) {
-			return Rx.Observable.combineLatest(
-				observers.map(function (observable) {
-					observable = observable.takeUntil(end);
-					return observable;
-				}),
-				function(values) {
-					return value;
-				}
-			);
-		});
-	};
-
-	return action;
-};
-
-module.exports = {make: Action};
-
-/*
-// class version:
-// we need to call onNext() or a wrapper like doAction() to propagate the action
-class Action extends Rx.Subject {
-	constructor() {
-	super();
-	}
-
-	doAction() {
-	onNext();
-	}
+function ensureArray(a) {
+  return a == null ? [] : Array.isArray(a) ? a : [a];
 }
-*/
+
+function create(withSuccessFailure = true) {
+  const start = new Rx.Subject();
+  const end = new Rx.Subject();
+
+  function action(...params) {
+    action.onNext(params);
+  }
+
+  for (let key in Rx.Subject.prototype) {
+    action[key] = Rx.Subject.prototype[key];
+  }
+
+  Rx.Subject.call(action);
+
+  const _onNext = action.onNext;
+
+  action.onNext = (params) => {
+    start.onNext(params);
+    _onNext.call(action, params);
+    end.onNext();
+  };
+
+  action.waitFor = (observables) => {
+    observables = ensureArray(observables);
+    return start
+      .flatMap((value) => {
+        return Rx.Observable.combineLatest(
+          observables.map((observable) => {
+            observable = observable.takeUntil(end).publish();
+            observable.connect();
+            return observable;
+          }),
+          () => value
+        );
+      });
+  };
+
+  if (withSuccessFailure) {
+    action.Success = create(false);
+    action.Failure = create(false);
+  }
+
+  return action;
+}
+
+export default {create};

@@ -1,18 +1,29 @@
-var Rx = require('rx');
+import Rx from 'rx';
 
-class Store extends Rx.Subject {
-    constructor() {
-	super();
-    }
+class Store extends Rx.BehaviorSubject {
+  constructor(value = {}) {
+    super(value);
+  }
 
-    observe(action, observer) {
-	var self = this;
-	
-	return action.subscribe((data) => {
-	    observer.call(self, data);
-	    this.onNext();
-	});
+  register(action, callback = x => x, successCallback = x => x, failureCallback = x => x) {
+    const subscription = action.subscribe(params =>
+        this.onNext(callback.call(this, this.getValue(), ...params))
+    );
+
+    if (action.Success && action.Failure) {
+      return Rx.CompositeDisposable(
+        subscription,
+        action.Success.subscribe(params =>
+            this.onNext(successCallback.call(this, this.getValue(), ...params))
+        ),
+        action.Failure.subscribe(params =>
+            this.onNext(failureCallback.call(this, this.getValue(), ...params))
+        )
+      );
+    } else {
+      return subscription;
     }
+  }
 }
 
-module.exports = Store;
+export default Store;

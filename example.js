@@ -1,32 +1,3 @@
-# Flurx
-
-Following the tradition of ridiculously titled Flux variations, I'm proud to announce Flurx.
-
-> Flux using RxJS, advocating but not strictly enforcing immutable data structures.
-
-## Description
-
-It's a very thin wrapper around `Rx.Subject` for Actions and `Rx.BehaviorSubject` for Stores, 
-basically adding only two methods:
-
-* waitFor on Actions,
-* register on Stores
-
-In a nutshell:
-
-* A Store is modelling a value that is changing over time (i.e. BehaviorSubject)
-* A Store can subscribe to many Actions, each with a handler
-* A handler receives the call parameters of the action and produces a new value of the store. 
-* React components can subscribe to Stores
-* React components can call Actions
-
-## Installation
-```
-npm install flurx
-```
-
-## Example
-```javascript
 import React from 'react';
 import {Store, Action} from 'flurx';
 
@@ -125,4 +96,3 @@ const LoginComponent = React.createClass({
     );
   }
 });
-```

@@ -1,4 +1,4 @@
-var Action = require('./action');
-var Store = require('./store');
+import Action from './action.js';
+import Store from './store.js';
 
-module.exports = {Action: Action, Store: Store};
+export default {Action, Store};
