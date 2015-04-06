@@ -89,21 +89,16 @@ const LoginComponent = React.createClass({
   },
 
   componentDidMount() {
-    this._subscription =
-      loginStore.subscribe(store => {
-        this.setState(store);
-      });
-  },
-
-  componentWillUnmount() {
-    this._subscription.dispose();
+    loginStore.subscribe(store => {
+      this.setState(store);
+    });
   },
 
   onSubmit(e) {
     e.preventDefault();
 
-    let username = this.refs.username.getValue().trim();
-    let password = this.refs.password.getValue().trim();
+    const username = this.refs.username.getValue().trim();
+    const password = this.refs.password.getValue().trim();
 
     if (!username || !password) {
       return;
