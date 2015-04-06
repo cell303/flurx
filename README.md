@@ -40,7 +40,11 @@ class LoginStore extends Store {
       warn: null
     });
 
-    this.register(LoginAction, this.onLogin, this.onLoginSuccess, this.onLoginFailure);
+    this.register(LoginAction, 
+      this.onLogin, 
+      this.onLoginSuccess, 
+      this.onLoginFailure
+    );
     
     // Shorthand for:
     // this.register(LoginAction, this.onLogin);
