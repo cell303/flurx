@@ -1,7 +1,7 @@
 {
-  "name": "reactive-flux",
+  "name": "flurx",
   "version": "0.2.0",
-  "description": "Flux using rxjs",
+  "description": "Flux using RxJS, advocating but not strictly enforcing immutable data structures",
   "main": "lib/index.js",
   "scripts": {
     "pretest": "./node_modules/.bin/babel ./src --out-dir ./lib",
