@@ -1,16 +1,20 @@
 import Rx from 'rx';
 
+function id(x) {
+  return x;
+}
+
 class Store extends Rx.BehaviorSubject {
   constructor(value = {}) {
     super(value);
   }
 
-  register(action, callback = x => x, successCallback = x => x, failureCallback = x => x) {
+  register(action, callback, successCallback, failureCallback) {
     const subscription = action.subscribe(params =>
-        this.onNext(callback.call(this, this.getValue(), ...params))
+        this.onNext((callback || id).call(this, this.getValue(), ...params))
     );
 
-    if (action.Success && action.Failure) {
+    if (successCallback && failureCallback && action.Success && action.Failure) {
       return Rx.CompositeDisposable(
         subscription,
         action.Success.subscribe(params =>

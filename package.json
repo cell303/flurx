@@ -1,6 +1,6 @@
 {
   "name": "flurx",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Flux using RxJS, advocating but not strictly enforcing immutable data structures",
   "main": "lib/index.js",
   "scripts": {
