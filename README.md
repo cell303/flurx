@@ -9,7 +9,7 @@ Following the tradition of ridiculously titled Flux variations, I'm proud to ann
 It's a very thin wrapper around `Rx.Subject` for Actions and `Rx.BehaviorSubject` for Stores, 
 basically adding only two methods:
 
-* waitFor on Actions,
+* waitFor on Actions
 * register on Stores
 
 In a nutshell:
@@ -40,14 +40,12 @@ class LoginStore extends Store {
       warn: null
     });
 
-    /*
-     this.register(LoginAction, this.onLogin);
-     this.register(LoginAction.Success, this.onLoginSuccess);
-     this.register(LoginAction.Failure, this.onLoginFailure);
-     */
-
-    // Shorthand:
     this.register(LoginAction, this.onLogin, this.onLoginSuccess, this.onLoginFailure);
+    
+    // Shorthand for:
+    // this.register(LoginAction, this.onLogin);
+    // this.register(LoginAction.Success, this.onLoginSuccess);
+    // this.register(LoginAction.Failure, this.onLoginFailure);
   }
 
   onLogin(store, username, password) {
@@ -70,12 +68,14 @@ class LoginStore extends Store {
     return Object.assign(store, {
       isLoggedIn: true,
       username: result.username
+      warn: null
     });
   }
 
   onLoginFailure(store, err) {
     return Object.assign(store, {
       isLoggedIn: false,
+      username: null,
       warn: err.message
     })
   }

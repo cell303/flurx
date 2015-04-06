@@ -1,6 +1,6 @@
 {
   "name": "reactive-flux",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "description": "Flux using rxjs",
   "main": "lib/index.js",
   "scripts": {
