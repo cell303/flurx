@@ -19,12 +19,6 @@ describe('Action', () => {
     expect(TestAction).toBeDefined();
   });
 
-  it('should create Success and Failure actions', () => {
-    const TestAction = Action.create();
-    expect(TestAction.Success).toBeDefined();
-    expect(TestAction.Failure).toBeDefined();
-  });
-
   it("should notify listeners when called", () => {
     const TestAction = Action.create();
     TestAction.subscribe(params => {

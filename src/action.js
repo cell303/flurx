@@ -4,7 +4,7 @@ function ensureArray(a) {
   return a == null ? [] : Array.isArray(a) ? a : [a];
 }
 
-function create(withSuccessFailure = true) {
+function create() {
   const start = new Rx.Subject();
   const end = new Rx.Subject();
 
@@ -20,13 +20,13 @@ function create(withSuccessFailure = true) {
 
   const _onNext = action.onNext;
 
-  action.onNext = (params) => {
+  action.onNext = params => {
     start.onNext(params);
     _onNext.call(action, params);
     end.onNext();
   };
 
-  action.waitFor = (observables) => {
+  action.waitFor = observables => {
     observables = ensureArray(observables);
     return start
       .flatMap((value) => {
@@ -40,11 +40,6 @@ function create(withSuccessFailure = true) {
         );
       });
   };
-
-  if (withSuccessFailure) {
-    action.Success = create(false);
-    action.Failure = create(false);
-  }
 
   return action;
 }

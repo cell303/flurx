@@ -4,8 +4,6 @@ Following the tradition of ridiculously titled Flux variations, I'm proud to ann
 
 > Flux using RxJS, advocating but not strictly enforcing immutable data structures.
 
-If you are also using ImmutableJS, see [`flurx-immutable`](https://github.com/cell303/flurx-immutable).
-
 ## Description
 
 It's a very thin wrapper around `Rx.Subject` for Actions and `Rx.BehaviorSubject` for Stores, 
@@ -33,6 +31,8 @@ import React from 'react';
 import {Store, Action} from 'flurx';
 
 const LoginAction = Action.create();
+const LoginActionSuccess = Action.create();
+const LoginActionFailure = Action.create();
 
 class LoginStore extends Store {
   constructor() {
@@ -42,23 +42,16 @@ class LoginStore extends Store {
       warn: null
     });
 
-    this.register(LoginAction, 
-      this.onLogin, 
-      this.onLoginSuccess, 
-      this.onLoginFailure
-    );
-    
-    // Shorthand for:
-    // this.register(LoginAction, this.onLogin);
-    // this.register(LoginAction.Success, this.onLoginSuccess);
-    // this.register(LoginAction.Failure, this.onLoginFailure);
+    this.register(LoginAction, this.onLogin);
+    this.register(LoginActionSuccess, this.onLoginSuccess);
+    this.register(LoginActionFailure, this.onLoginFailure);
   }
 
   onLogin(store, username, password) {
     if (!store.isLoggedIn) {
       getJSON('/login', {username, password})
-        .then(LoginAction.Success)
-        .catch(LoginAction.Failure);
+        .then(LoginActionSuccess)
+        .catch(LoginActionFailure);
 
       return Object.assign(store, {
         isLoggedIn: true,

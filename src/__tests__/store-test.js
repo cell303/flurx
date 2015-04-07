@@ -90,52 +90,5 @@ describe('Store', () => {
 
     expect(i).toBe(3)
   });
-
-  it('should be able to call Success and Failure Actions', () => {
-    const TestStore = new Store();
-    const TestAction = Action.create();
-
-    let calledSuccess = false;
-    let calledFailure = false;
-
-    TestStore.register(TestAction.Success, store => {
-      calledSuccess = true;
-      return store;
-    });
-
-    TestStore.register(TestAction.Failure, store => {
-      calledFailure = true;
-      return store;
-    });
-
-    TestAction.Success();
-    TestAction.Failure();
-
-    expect(calledSuccess).toBe(true);
-    expect(calledFailure).toBe(true);
-  });
-
-  it('should register success and failure handlers', () => {
-    const TestStore = new Store();
-    const TestAction = Action.create();
-
-    let calledSuccess = false;
-    let calledFailure = false;
-
-    TestStore.register(TestAction, v => v, v => {
-      calledSuccess = true;
-      return v;
-    }, v => {
-      calledFailure = true;
-      return v;
-    });
-
-    TestAction.Success();
-    TestAction.Failure();
-
-    expect(calledSuccess).toBe(true);
-    expect(calledFailure).toBe(true);
-  });
-
 });
 
