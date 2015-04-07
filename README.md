@@ -4,6 +4,8 @@ Following the tradition of ridiculously titled Flux variations, I'm proud to ann
 
 > Flux using RxJS, advocating but not strictly enforcing immutable data structures.
 
+If you are also using ImmutableJS, see [`flurx-immutable`](https://github.com/cell303/flurx-immutable).
+
 ## Description
 
 It's a very thin wrapper around `Rx.Subject` for Actions and `Rx.BehaviorSubject` for Stores, 
