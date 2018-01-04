@@ -1,5 +1,7 @@
 # Flurx
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/qwtel/flurx.svg)](https://greenkeeper.io/)
+
 Following the tradition of ridiculously titled Flux variations, I'm proud to announce Flurx.
 
 > Flux using RxJS, advocating but not strictly enforcing immutable data structures.
